@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CalcKms</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="panel panel--converter">
+        <p class="eyebrow">CALCKMS</p>
+        <h1>Conversor de distancia</h1>
+        <p class="subtitle">Diseño moderno, minimalista y enfocado en velocidad.</p>
+
+        <form id="converter" class="converter-form" novalidate>
+          <label for="kmInput">Kilómetros</label>
+          <div class="input-row">
+            <input id="kmInput" type="number" min="0" step="any" placeholder="Ej. 12.5" required />
+            <button type="submit">Convertir</button>
+          </div>
+        </form>
+
+        <div class="result" aria-live="polite">
+          <span class="result__label">Resultado</span>
+          <strong id="resultValue">0.00 mi</strong>
+        </div>
+      </section>
+
+      <section class="panel panel--info">
+        <h2>Referencia rápida</h2>
+        <ul>
+          <li><span>1 km</span><strong>0.621 mi</strong></li>
+          <li><span>5 km</span><strong>3.107 mi</strong></li>
+          <li><span>10 km</span><strong>6.214 mi</strong></li>
+        </ul>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
