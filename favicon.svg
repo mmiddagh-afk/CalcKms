@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <!-- Background Gradient: Emerald (Savings) -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#34d399"/> <!-- emerald-400 -->
+      <stop offset="100%" style="stop-color:#059669"/> <!-- emerald-600 -->
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#064e3b" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Base App Icon Shape -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  
+  <!-- Subtle inner highlight for 3D effect -->
+  <rect width="508" height="508" x="2" y="2" rx="110" fill="none" stroke="#ffffff" stroke-opacity="0.3" stroke-width="4"/>
+
+  <!-- Speed lines & Road -->
+  <g transform="translate(106, 158) scale(7.5)" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" opacity="0.4">
+    <line x1="-3" y1="18" x2="3" y2="18" />
+    <line x1="-6" y1="14" x2="0" y2="14" />
+    <line x1="-1" y1="21" x2="4" y2="21" />
+    <line x1="8" y1="27" x2="16" y2="27" />
+    <line x1="22" y1="27" x2="34" y2="27" />
+  </g>
+
+  <!-- Car Silhouette (same exact paths as the app header) -->
+  <g transform="translate(106, 158) scale(7.5)" filter="url(#shadow)">
+    <!-- Car body -->
+    <path d="M6 16C6 14.8954 6.89543 14 8 14H32C33.1046 14 34 14.8954 34 16V20C34 21.1046 33.1046 22 32 22H8C6.89543 22 6 21.1046 6 20V16Z" fill="#ffffff" />
+    <!-- Roof -->
+    <path d="M11 14L14 6H26L29 14H11Z" fill="#ffffff" />
+    
+    <!-- Cutouts for windows (transparent showing gradient) -->
+    <path d="M13 13L15 8H19V13H13Z" fill="#059669" />
+    <path d="M21 13V8H25L27 13H21Z" fill="#059669" />
+    
+    <!-- Cutouts for lights -->
+    <rect x="32" y="16" width="3" height="1.5" fill="#059669" />
+    <rect x="5" y="16" width="2" height="1.5" fill="#059669" />
+    
+    <!-- Wheels -->
+    <circle cx="12" cy="22" r="3.5" fill="#ffffff" />
+    <circle cx="28" cy="22" r="3.5" fill="#ffffff" />
+    <circle cx="12" cy="22" r="1.5" fill="#059669" />
+    <circle cx="28" cy="22" r="1.5" fill="#059669" />
+  </g>
+</svg>

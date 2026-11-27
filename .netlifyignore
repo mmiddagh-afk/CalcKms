@@ -1,0 +1,8 @@
+.git
+.netlify
+.worktrees
+.superpowers
+node_modules
+tests
+docs
+cambios.md

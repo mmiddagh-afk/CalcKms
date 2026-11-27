@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Mi Ahorro Vehicular</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/lucide@0.575.0"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('calcKmsThemeMode') === 'dark') {
+                    document.documentElement.classList.add('theme-dark');
+                    if (document.body) {
+                        document.body.classList.add('theme-dark');
+                    } else {
+                        document.addEventListener('DOMContentLoaded', function () {
+                            if (document.body) document.body.classList.add('theme-dark');
+                        }, { once: true });
+                    }
+                }
+            } catch (_) {}
+        })();
+    </script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="min-h-screen bg-[#F2F2F7] text-gray-800 relative flex justify-center sm:items-center sm:py-6">
+    <script>if (document.documentElement.classList.contains('theme-dark') && document.body) document.body.classList.add('theme-dark');</script>
+
+    <!-- Preloader Firebase -->
+    <div id="firebasePreloader"
+        class="fixed inset-0 z-[9999] flex items-center justify-center transition-opacity duration-500">
+        <div class="firebase-preloader-inner">
+            <div class="firebase-preloader-logo-wrap">
+                <div class="firebase-preloader-ring"></div>
+                <div class="firebase-preloader-ring-pulse"></div>
+                <div class="firebase-preloader-icon">
+                    <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        <path d="M19 7a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        <path d="M9 17h6l4-10"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <h2 class="text-[10px] font-extrabold uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500 mb-1">Mi Ahorro Vehicular</h2>
+                <p id="firebasePreloaderText" class="firebase-preloader-text">Conectando a Firebase...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedor Principal APP -->
+    <div class="app-container w-full max-w-[440px] lg:max-w-[1280px] bg-[#F2F2F7] sm:rounded-[2rem] sm:shadow-2xl overflow-hidden min-h-screen sm:min-h-0 lg:h-[calc(100vh-3rem)] relative flex flex-col lg:flex-row">
+
+        <!-- ==================== DESKTOP SIDEBAR ==================== -->
+        <aside id="desktopSidebar" class="hidden lg:flex flex-col w-64 bg-white border-r border-gray-200/80 p-5 shrink-0 justify-between select-none">
+            <div>
+                <!-- Brand Logo -->
+                <div class="flex items-center gap-3 mb-8 px-2">
+                    <div class="w-10 h-10 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-xl flex items-center justify-center text-white shadow-md">
+                        <i data-lucide="car" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-black text-slate-900 leading-tight">Mi Ahorro</h2>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-600">Vehicular</span>
+                    </div>
+                </div>
+
+                <!-- Navigation List -->
+                <nav class="space-y-1">
+                    <button type="button" id="btnDesktopNavInicio" onclick="switchDesktopTab('inicio')" class="desktop-nav-item active flex items-center gap-3 w-full px-3.5 py-3 rounded-xl text-xs font-bold text-emerald-600 bg-emerald-50 transition-all">
+                        <i data-lucide="home" class="w-4 h-4"></i>
+                        <span>Inicio</span>
+                    </button>
+                    <button type="button" id="btnDesktopNavGasolina" onclick="switchDesktopTab('gasolina')" class="desktop-nav-item flex items-center gap-3 w-full px-3.5 py-3 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all">
+                        <i data-lucide="fuel" class="w-4 h-4"></i>
+                        <span>Gasolina</span>
+                    </button>
+                    <button type="button" id="btnDesktopNavMantenimiento" onclick="switchDesktopTab('mantenimiento')" class="desktop-nav-item flex items-center gap-3 w-full px-3.5 py-3 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all">
+                        <i data-lucide="wrench" class="w-4 h-4"></i>
+                        <span>Mantenimiento</span>
+                    </button>
+                    <button type="button" id="btnDesktopNavIngresos" onclick="switchDesktopTab('ingresos')" class="desktop-nav-item flex items-center gap-3 w-full px-3.5 py-3 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all">
+                        <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+                        <span>Rentabilidad</span>
+                    </button>
+                    <button type="button" id="btnDesktopNavDeudas" onclick="switchDesktopTab('deudas')" class="desktop-nav-item flex items-center gap-3 w-full px-3.5 py-3 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all">
+                        <i data-lucide="wallet" class="w-4 h-4"></i>
+                        <span>Deudas y Extras</span>
+                    </button>
+                    <button type="button" id="btnDesktopNavHistorial" onclick="switchDesktopTab('historial')" class="desktop-nav-item flex items-center gap-3 w-full px-3.5 py-3 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all">
+                        <i data-lucide="clock-3" class="w-4 h-4"></i>
+                        <span>Historial</span>
+                    </button>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Wrapper Container -->
+        <div class="flex-grow flex flex-col overflow-hidden relative">
+
+            <!-- ==================== HEADER ==================== -->
+        <header class="app-header bg-white px-5 py-3 flex items-center justify-between sticky top-0 z-20 border-b border-gray-100">
+            <h1 class="text-sm font-bold text-gray-800 tracking-tight">Mi Ahorro Vehicular</h1>
+            <div class="flex items-center gap-1">
+                <div class="flex items-center gap-1.5 px-2 py-1 rounded-full">
+                    <span id="statusConexion" class="w-2 h-2 rounded-full bg-gray-300 transition-colors"></span>
+                    <span id="textoConexion" class="text-[9px] font-semibold text-gray-400 hidden sm:inline">...</span>
+                </div>
+                <span id="pendingOpsBadge"
+                    class="hidden px-2 py-1 rounded-full bg-amber-100 text-amber-700 text-[9px] font-bold tracking-wide">
+                    0 pendientes
+                </span>
+                <button type="button" id="themeToggleBtn" onclick="toggleThemeMode()"
+                    class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-50 transition-colors"
+                    title="Cambiar tema">
+                    <i data-lucide="moon" class="w-5 h-5 text-gray-600"></i>
+                </button>
+                <details class="relative group" data-mobile-module="ajustes">
+                    <summary class="list-none cursor-pointer w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-50 transition-colors">
+                        <i data-lucide="settings" class="w-5 h-5 text-gray-700"></i>
+                    </summary>
+                    <div class="absolute right-0 top-12 w-72 bg-white p-5 rounded-2xl shadow-2xl border border-gray-100 z-50 animate-zoom-in">
+                        <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
+                            <div class="p-2 bg-emerald-50 rounded-lg">
+                                <i data-lucide="cloud" class="w-4 h-4 text-emerald-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-gray-800">Sincronizacion</p>
+                                <p class="text-[10px] text-gray-400">Conecta con tu clave unica</p>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="flex gap-2 mb-1.5">
+                                <input type="text" id="syncIdInput" placeholder="Mínimo 8 caracteres (o genera una aleatoria)"
+                                    class="w-full p-2.5 bg-gray-50 rounded-xl text-xs font-medium border border-gray-200 focus:bg-white focus:border-emerald-400 focus:ring-2 focus:ring-emerald-50 outline-none transition-all">
+                                <button id="btnSync" onclick="manejarClickSincronizar()"
+                                    class="btn-premium btn-premium-success px-4 py-2.5 text-xs font-bold shrink-0 rounded-xl">OK</button>
+                            </div>
+                            <p class="text-[10px] text-gray-400 leading-tight">Mínimo 8 caracteres (o genera una aleatoria)</p>
+                        </div>
+                        <button type="button" id="btnGenerarSyncKey" onclick="window.generarClaveSincronizacionSegura()"
+                            class="w-full mb-3 py-2 px-3 bg-gray-50 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 border border-gray-200/80 rounded-xl text-[11px] font-semibold text-gray-600 flex items-center justify-center gap-1.5 transition-all active:scale-95">
+                            <i data-lucide="key" class="w-3.5 h-3.5 text-emerald-600"></i>
+                            <span>Generar clave aleatoria</span>
+                        </button>
+                        <div class="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+                            <span class="w-2 h-2 rounded-full bg-gray-300 animate-pulse"></span>
+                            <p id="statusSync" class="text-[10px] text-gray-500 font-medium">Modo Local</p>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </header>
+
+        <div id="mobileModuleToolbar" class="mobile-module-toolbar" aria-hidden="true">
+            <button type="button" id="mobileModuleBackBtn" class="mobile-module-back-btn">
+                <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                <span>Inicio</span>
+            </button>
+            <div>
+                <p class="text-[9px] font-extrabold uppercase tracking-[0.24em] text-emerald-500">Modulo</p>
+                <h2 id="mobileModuleTitle" class="text-lg font-black text-slate-900 leading-tight">Inicio</h2>
+            </div>
+        </div>
+
+        <!-- ==================== CONTENIDO SCROLLABLE ==================== -->
+        <div id="dashboardLayout" class="desktop-dashboard flex-grow overflow-y-auto pb-24 lg:pb-6 custom-scrollbar">
+
+            <!-- ===== CIERRE DEL DIA (Hero Section - White) ===== -->
+            <section id="seccionCierreDia" data-mobile-module="cierre" data-mobile-home-main="true" class="mx-4 mt-4 bg-white rounded-2xl p-5 shadow-sm border border-gray-100 animate-slide-up-fade">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                        <i data-lucide="activity" class="w-3 h-3"></i>
+                        Estado Actual
+                    </span>
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500 text-white text-[10px] font-bold">
+                        <i data-lucide="clock" class="w-3 h-3"></i>
+                        <span id="horaActualBadge">--:--</span>
+                    </span>
+                </div>
+
+                <h2 class="inline-flex items-center gap-2 text-2xl font-extrabold text-gray-900 tracking-tight leading-tight mb-4">
+                    <i data-lucide="clipboard-check" class="w-6 h-6 text-emerald-500"></i>
+                    CIERRE DEL DIA
+                </h2>
+
+                <div class="cierre-main-card mb-4">
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <!-- Progress Ring SVG -->
+                            <div class="hero-ring-wrap shrink-0">
+                                <svg width="64" height="64" viewBox="0 0 64 64" class="hero-ring-svg" aria-hidden="true">
+                                    <circle class="hero-ring-track" cx="32" cy="32" r="26" fill="none" stroke-width="4"/>
+                                    <circle id="progressRing" class="hero-ring-fill" cx="32" cy="32" r="26" fill="none" stroke-width="4"
+                                        stroke-dasharray="163.4" stroke-dashoffset="163.4"
+                                        transform="rotate(-90 32 32)"/>
+                                    <text x="32" y="36" text-anchor="middle" class="hero-ring-text" id="progressRingPct">0%</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-[0.18em]">Ganancia libre hoy</p>
+                                <span id="gananciaLibre" class="text-4xl font-black tracking-tight text-slate-800 leading-none skeleton-loading">$0</span>
+                            </div>
+                        </div>
+                        <div id="estadoJornadaBadge" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-[10px] font-bold text-emerald-600 uppercase tracking-wide shrink-0">
+                            <i data-lucide="sparkles" class="w-3 h-3"></i>
+                            <span id="estadoJornadaBadgeText">Calculando</span>
+                        </div>
+                    </div>
+                    <p id="mensajeBalance" class="text-[11px] text-slate-500 mt-2">Esperando datos...</p>
+                    <div class="cierre-main-separator"></div>
+                    <div class="flex items-center justify-between gap-3">
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total a separar</span>
+                        <span id="totalDiario" class="text-2xl font-black text-red-500 tracking-tight skeleton-loading">$0</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div class="cierre-cost-chip chip-fuel">
+                        <span class="inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider mb-0.5 chip-fuel-label">
+                            <i data-lucide="fuel" class="w-3 h-3"></i>
+                            Gasolina
+                        </span>
+                        <span id="gastoGasolinaHoy" class="text-base font-extrabold skeleton-loading">$0</span>
+                    </div>
+                    <div class="cierre-cost-chip chip-maint">
+                        <span class="inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider mb-0.5 chip-maint-label">
+                            <i data-lucide="wrench" class="w-3 h-3"></i>
+                            Mantenimiento
+                        </span>
+                        <span id="gastoMantenimientoHoy" class="text-base font-extrabold skeleton-loading">$0</span>
+                    </div>
+                </div>
+
+                <!-- KM Recorridos Hoy -->
+                <div class="mb-2">
+                    <label for="kmHoy" class="inline-flex items-center gap-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">
+                        <i data-lucide="route" class="w-3 h-3"></i>
+                        KM Recorridos Hoy
+                    </label>
+                    <div class="flex items-baseline gap-1">
+                        <input type="number" id="kmHoy" placeholder="0"
+                            class="input-calc text-5xl font-extrabold text-emerald-500 bg-transparent outline-none w-full placeholder-gray-200 leading-none"
+                            style="max-width: 200px;">
+                        <span class="text-lg font-semibold text-gray-300">km</span>
+                    </div>
+                </div>
+
+                <!-- CTA: Agregar al Historial -->
+                <button onclick="agregarDeuda()"
+                    class="w-full mt-4 py-4 btn-premium btn-premium-success btn-ripple text-sm font-bold rounded-2xl">
+                    <i data-lucide="plus" class="w-5 h-5"></i>
+                    <span>Agregar al Historial</span>
+                </button>
+
+                <!-- Carga Rápida Gasolina -->
+                <button type="button" onclick="openQuickSheet('gasolina')"
+                    class="w-full mt-2 py-3 text-blue-600 font-bold text-sm rounded-2xl border border-blue-100 bg-blue-50 hover:bg-blue-100 active:scale-95 transition-all flex items-center justify-center gap-2 lg:hidden">
+                    <i data-lucide="fuel" class="w-4 h-4"></i>
+                    Carga rápida de gasolina
+                </button>
+            </section>
+
+            <section id="mobileModuleHome" class="mobile-module-home mx-4 mt-3 animate-slide-up-fade" aria-labelledby="mobile-modules-heading">
+                <div class="flex items-end justify-between gap-3 mb-3">
+                    <div>
+                        <p class="text-[10px] font-extrabold uppercase tracking-[0.24em] text-emerald-500">Accesos rapidos</p>
+                        <h2 id="mobile-modules-heading" class="text-xl font-black text-slate-900 tracking-tight">Modulos</h2>
+                    </div>
+                    <span class="mobile-module-count">6</span>
+                </div>
+
+                <div class="mobile-home-premium-card" aria-label="Resumen de navegacion movil">
+                    <div>
+                        <p class="mobile-home-kicker">Acceso rapido</p>
+                        <h3>¿Cargaste nafta hoy?</h3>
+                        <p>Registrá tu carga de gasolina al toque para mantener al día el cálculo del costo por kilómetro y tus deudas.</p>
+                    </div>
+                    <button type="button" id="btnCargarGasolinaHome" class="mobile-home-cta" data-mobile-open="deudas" data-mobile-title="Deudas y extras">
+                        Cargar gasolina
+                        <i data-lucide="fuel" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <div class="mobile-module-grid" role="list">
+                    <button type="button" class="mobile-module-card mobile-module-card-gas" data-mobile-open="gasolina" data-mobile-title="Gasolina" role="listitem">
+                        <span class="mobile-module-icon"><i data-lucide="fuel" class="w-5 h-5"></i></span>
+                        <span class="mobile-module-copy">
+                            <strong>Gasolina</strong>
+                            <small>Costo por KM</small>
+                            <span id="moduleValueGasolina" class="module-value-badge"></span>
+                        </span>
+                        <i data-lucide="chevron-right" class="mobile-module-arrow w-4 h-4"></i>
+                    </button>
+                    <button type="button" class="mobile-module-card mobile-module-card-maint" data-mobile-open="mantenimiento" data-mobile-title="Mantenimiento" role="listitem">
+                        <span class="mobile-module-icon"><i data-lucide="wrench" class="w-5 h-5"></i></span>
+                        <span class="mobile-module-copy">
+                            <strong>Mantenimiento</strong>
+                            <small>Meta y ahorro</small>
+                            <span id="moduleValueMaint" class="module-value-badge"></span>
+                        </span>
+                        <i data-lucide="chevron-right" class="mobile-module-arrow w-4 h-4"></i>
+                    </button>
+                    <button type="button" class="mobile-module-card mobile-module-card-income" data-mobile-open="ingresos" data-mobile-title="Ingresos y rentabilidad" role="listitem">
+                        <span class="mobile-module-icon"><i data-lucide="bar-chart-3" class="w-5 h-5"></i></span>
+                        <span class="mobile-module-copy">
+                            <strong>Rentabilidad</strong>
+                            <small>Ingresos y metas</small>
+                            <span id="moduleValueIngresos" class="module-value-badge"></span>
+                        </span>
+                        <i data-lucide="chevron-right" class="mobile-module-arrow w-4 h-4"></i>
+                    </button>
+                    <button type="button" class="mobile-module-card mobile-module-card-debt" data-mobile-open="deudas" data-mobile-title="Deudas y extras" role="listitem">
+                        <span class="mobile-module-icon"><i data-lucide="wallet" class="w-5 h-5"></i></span>
+                        <span class="mobile-module-copy">
+                            <strong>Deudas</strong>
+                            <small>Combustible y extras</small>
+                            <span id="moduleValueDeudas" class="module-value-badge"></span>
+                        </span>
+                        <i data-lucide="chevron-right" class="mobile-module-arrow w-4 h-4"></i>
+                    </button>
+                    <button type="button" class="mobile-module-card mobile-module-card-history" data-mobile-open="historial" data-mobile-title="Historial" role="listitem">
+                        <span class="mobile-module-icon"><i data-lucide="clock-3" class="w-5 h-5"></i></span>
+                        <span class="mobile-module-copy">
+                            <strong>Historial</strong>
+                            <small>Movimientos</small>
+                            <span id="moduleValueHistorial" class="module-value-badge"></span>
+                        </span>
+                        <i data-lucide="chevron-right" class="mobile-module-arrow w-4 h-4"></i>
+                    </button>
+                    <button type="button" class="mobile-module-card mobile-module-card-settings" data-mobile-open="ajustes" data-mobile-title="Ajustes" role="listitem">
+                        <span class="mobile-module-icon"><i data-lucide="settings" class="w-5 h-5"></i></span>
+                        <span class="mobile-module-copy">
+                            <strong>Ajustes</strong>
+                            <small>Sync y tema</small>
+                        </span>
+                        <i data-lucide="chevron-right" class="mobile-module-arrow w-4 h-4"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- ===== GASOLINA ===== -->
+            <section id="seccionGasolina" data-mobile-module="gasolina" aria-labelledby="gasolina-heading"
+                class="mx-4 mt-3 bg-white rounded-2xl p-5 shadow-sm border border-gray-100 animate-slide-up-fade stagger-1">
+                <div class="flex items-center gap-2.5 mb-4">
+                    <div class="w-9 h-9 bg-gray-100 rounded-xl flex items-center justify-center">
+                        <i data-lucide="fuel" class="w-4.5 h-4.5 text-gray-600"></i>
+                    </div>
+                    <h2 id="gasolina-heading" class="text-base font-bold text-gray-900">Gasolina</h2>
+                </div>
+
+                <div class="space-y-0">
+                    <div class="flex items-center justify-between py-3 border-b border-gray-50">
+                        <span class="text-sm text-gray-500">Precio por Litro</span>
+                        <input type="number" id="precioLitro" placeholder="0.00" step="0.01"
+                            class="input-calc text-sm font-bold text-emerald-500 text-right bg-transparent outline-none w-20">
+                    </div>
+                    <div class="flex items-center justify-between py-3">
+                        <span class="text-sm text-gray-500">Consumo L/100KM</span>
+                        <input type="number" id="consumo" placeholder="0"
+                            class="input-calc text-sm font-bold text-emerald-500 text-right bg-transparent outline-none w-20">
+                    </div>
+                </div>
+
+                <div id="boxGasolinaResult" class="hidden mt-2 text-right pt-2 border-t border-gray-100">
+                    <span class="text-xs text-gray-400">Costo KM:</span>
+                    <span id="costoGasolinaPorKm" class="text-sm font-bold text-emerald-500 ml-1">$0.00</span>
+                </div>
+            </section>
+
+            <!-- ===== MANTENIMIENTO ===== -->
+            <section id="seccionMantenimiento" data-mobile-module="mantenimiento" aria-labelledby="mantenimiento-heading"
+                class="mx-4 mt-3 bg-white rounded-2xl p-5 shadow-sm border border-gray-100 animate-slide-up-fade stagger-2">
+                <div class="flex items-center gap-2.5 mb-4">
+                    <div class="w-9 h-9 bg-gray-100 rounded-xl flex items-center justify-center">
+                        <i data-lucide="wrench" class="w-4.5 h-4.5 text-gray-600"></i>
+                    </div>
+                    <h2 id="mantenimiento-heading" class="text-base font-bold text-gray-900">Mantenimiento</h2>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="mb-4">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Progreso Meta KM</span>
+                        <span id="progressPercent" class="text-xs font-bold text-gray-500">0%</span>
+                    </div>
+                    <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                        <div id="barraKmSimple" class="h-full bg-emerald-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Meta / Ahorrado Row -->
+                <div class="grid grid-cols-2 gap-4 mb-3">
+                    <div>
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Meta</span>
+                        <div class="flex items-baseline gap-0.5">
+                            <input type="number" id="kmMeta" value="5000"
+                                class="input-calc text-sm font-bold text-gray-800 bg-transparent outline-none w-full">
+                            <span class="text-[10px] text-gray-400">KM</span>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Ahorrado</span>
+                        <div class="flex items-baseline gap-0.5">
+                            <span class="text-xs text-gray-400">$</span>
+                            <input type="number" id="ahorroActual" placeholder="0"
+                                class="input-calc text-sm font-bold text-gray-800 bg-transparent outline-none w-full">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hidden advanced fields -->
+                <div class="space-y-2 pt-3 border-t border-gray-50">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-xs text-gray-400">Costo Meta</span>
+                            <span id="badgeDesgasteMulticomponente" class="hidden text-[9px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-md">Por componentes</span>
+                        </div>
+                        <input type="number" id="metaMantenimiento" placeholder="$0"
+                            class="input-calc text-xs font-bold text-gray-700 text-right bg-transparent outline-none w-20">
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-gray-400">KM Recorridos</span>
+                        <input type="number" id="kmRecorridosCiclo" placeholder="0"
+                            class="input-calc text-xs font-bold text-gray-700 text-right bg-transparent outline-none w-20">
+                    </div>
+                    <div id="mantenimientoDesgloseComponentes" class="hidden pt-2.5 pb-1 border-t border-gray-50">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1">
+                                <i data-lucide="layers" class="w-3 h-3 text-emerald-500"></i>
+                                Desgaste activo
+                            </span>
+                            <button type="button" id="btnConfigurarVehiculo" onclick="abrirModalVehiculo()"
+                                class="text-[10px] font-bold text-emerald-600 hover:text-emerald-700 hover:underline flex items-center gap-0.5">
+                                <span>Ajustar</span>
+                                <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                            </button>
+                        </div>
+                        <div id="mantenimientoListaChips" class="flex flex-wrap gap-1.5 text-[10px]">
+                            <!-- Chips generados dinámicamente -->
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between gap-2 pt-3 mt-1 border-t border-gray-100">
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="circle-minus" class="w-3.5 h-3.5 text-amber-500"></i>
+                            <span class="text-xs text-gray-400">Gasto / Emergencia</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-xs text-gray-400">$</span>
+                            <input type="number" id="descuentoMantenimiento" placeholder="0" inputmode="numeric"
+                                class="text-xs font-bold text-gray-700 text-right bg-gray-50 border border-gray-200 rounded-lg px-2 py-1 outline-none w-16 focus:border-amber-400">
+                            <button type="button" id="btnDescontarMantenimiento" onclick="aplicarDescuentoMantenimiento()"
+                                class="btn-premium btn-premium-warning btn-ripple px-2.5 py-1 text-[11px] font-bold rounded-lg shadow-sm">
+                                Descontar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="boxMantenimientoResult" class="hidden mt-3 flex justify-end items-center gap-3">
+                    <div id="msgMetaAlcanzada"
+                        class="hidden text-[10px] font-bold text-white bg-emerald-500 px-2 py-0.5 rounded-full">Meta OK
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-400">Ahorro KM:</span>
+                        <span id="ahorroMantenimientoPorKm" class="text-sm font-bold text-emerald-500 ml-1">$0.00</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== CONTROL DE MANTENIMIENTO (Hidden by default) ===== -->
+            <section id="seccionControlMant" data-mobile-module="mantenimiento" aria-labelledby="control-heading"
+                class="hidden mx-4 mt-3 bg-white rounded-2xl p-5 shadow-sm border border-emerald-100 animate-slide-up-fade">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-9 h-9 bg-emerald-50 rounded-xl flex items-center justify-center">
+                        <i data-lucide="gauge" class="w-4 h-4 text-emerald-600"></i>
+                    </div>
+                    <h2 id="control-heading" class="text-sm font-bold text-gray-900">Control de Mantenimiento</h2>
+                </div>
+
+                <!-- KM Progress -->
+                <div class="mb-4">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Kilometros</span>
+                        <span class="text-xs font-bold text-gray-600">
+                            <span id="ctrlKmActual">0</span> / <span id="ctrlKmMeta">5000</span> km
+                        </span>
+                    </div>
+                    <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                        <div id="barraKm" class="h-full bg-emerald-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <p class="text-[10px] text-gray-400 mt-1 text-right">Faltan <span id="ctrlKmFaltan" class="font-bold text-emerald-600">5000</span> km</p>
+
+                    <!-- Suma: KM ciclo actual + KM del historial -->
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1">
+                            <i data-lucide="layers" class="w-3 h-3"></i>
+                            Total comprometidos
+                        </span>
+                        <span class="text-xs font-extrabold text-violet-600">
+                            <span id="ctrlKmComprometidosTotal">0</span> /
+                            <span id="ctrlKmComprometidosMetaLabel">5000</span> km
+                        </span>
+                    </div>
+                    <p class="text-[10px] text-gray-400 mt-0.5 text-right">
+                        Hoy <span id="ctrlKmCicloHoy" class="font-bold text-gray-600">0</span> km
+                        + historial <span id="ctrlKmHistorialAcum" class="font-bold text-gray-600">0</span> km
+                    </p>
+
+                    <div id="ctrlKmComprometidosBox" class="hidden mt-2 rounded-xl border px-3 py-2">
+                        <div class="flex items-center justify-between gap-2 mb-1">
+                            <span id="ctrlKmComprometidosTitulo" class="text-[10px] font-extrabold uppercase tracking-wider">Km comprometidos</span>
+                            <span id="ctrlKmComprometidosBadge" class="text-[9px] font-black uppercase tracking-wider">Atencion</span>
+                        </div>
+                        <p id="ctrlKmComprometidosMsg" class="text-[10px] leading-snug"></p>
+                    </div>
+                </div>
+
+                <!-- Savings Progress -->
+                <div class="mb-4">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Ahorro</span>
+                        <span class="text-xs font-bold text-gray-600">
+                            $<span id="ctrlAhorroActual">0</span> / $<span id="ctrlAhorroMeta">0</span>
+                        </span>
+                    </div>
+                    <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                        <div id="barraAhorro" class="h-full bg-emerald-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Balance Card -->
+                <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-[10px] font-bold text-gray-400 uppercase">Deberia tener</span>
+                        <span id="ctrlDeberiaAhorro" class="text-sm font-bold text-gray-600">$0</span>
+                    </div>
+                    <div class="flex justify-between items-center mb-3 pb-3 border-b border-gray-200">
+                        <span class="text-[10px] font-bold text-gray-400 uppercase">Tiene ahorrado</span>
+                        <span id="ctrlTieneAhorro" class="text-sm font-bold text-emerald-600">$0</span>
+                    </div>
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-[10px] font-bold text-gray-400 uppercase">Sobre mantenimiento</span>
+                        <span id="ctrlSobreMantenimiento" class="text-sm font-bold text-blue-600">$0</span>
+                    </div>
+                    <p id="ctrlSobreMantenimientoHint" class="text-[10px] text-right text-gray-400 mb-3">Sin ajuste por deuda Uber.</p>
+                    <div class="flex justify-between items-center">
+                        <span id="ctrlBalanceLabel" class="text-xs font-bold text-gray-700 uppercase">Diferencia</span>
+                        <span id="ctrlBalanceValor" class="text-lg font-extrabold text-emerald-600">$0</span>
+                    </div>
+                    <p id="ctrlBalanceMsg" class="text-[10px] text-center mt-3 text-gray-400 font-medium">Ingresa datos de mantenimiento</p>
+                </div>
+            </section>
+
+            <!-- ===== RESUMEN DE GANANCIAS ===== -->
+            <section id="seccionResumenGanancias" data-mobile-module="ingresos" class="mx-4 mt-3 bg-gradient-to-br from-emerald-50 via-[#E8F8EE] to-emerald-50/80 rounded-2xl p-5 shadow-sm border border-emerald-100 animate-slide-up-fade stagger-3">
+                <div class="flex items-center gap-2.5 mb-5">
+                    <div class="w-9 h-9 bg-emerald-100 rounded-xl flex items-center justify-center">
+                        <i data-lucide="bar-chart-3" class="w-4.5 h-4.5 text-emerald-600"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-gray-900">Ingresos y Rentabilidad</h3>
+                </div>
+
+                <!-- Ingresos Totales -->
+                <div class="mb-3">
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Ingresos Totales</label>
+                    <div class="bg-white rounded-xl p-3 border border-gray-200 flex items-center gap-2.5 shadow-sm">
+                        <div class="w-8 h-8 bg-emerald-50 rounded-lg flex items-center justify-center shrink-0">
+                            <i data-lucide="wallet" class="w-4 h-4 text-emerald-500"></i>
+                        </div>
+                        <input type="number" id="ingresosHoy" placeholder="$0"
+                            class="input-calc text-xl font-extrabold text-gray-800 bg-transparent outline-none w-full">
+                    </div>
+                </div>
+
+                <!-- Meta Ganancia Neta -->
+                <div class="mt-3 pt-3 border-t border-emerald-200/60">
+                    <div class="flex items-center justify-between bg-white/70 rounded-xl p-3 border border-emerald-100">
+                        <div class="flex items-center gap-2">
+                            <div class="w-7 h-7 bg-amber-50 rounded-lg flex items-center justify-center shrink-0">
+                                <i data-lucide="target" class="w-3.5 h-3.5 text-amber-500"></i>
+                            </div>
+                            <span class="text-xs font-bold text-gray-500">Meta Ganancia Neta</span>
+                        </div>
+                        <input type="number" id="metaGananciaNeta" placeholder="$0"
+                            class="input-calc text-sm font-extrabold text-gray-700 text-right bg-transparent outline-none w-24">
+                    </div>
+                </div>
+
+                <!-- Rentabilidad por Hora -->
+                <div id="rentabilidadHoraBox" class="hidden mt-3 space-y-2">
+                    <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-gray-200 shadow-sm">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="clock" class="w-3.5 h-3.5 text-gray-400"></i>
+                            <span class="text-[10px] font-bold text-gray-400 uppercase">Bruta/Hora</span>
+                        </div>
+                        <span id="rentabilidadBrutaValor" class="text-sm font-extrabold text-gray-600">$0/h</span>
+                    </div>
+                    <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-emerald-200 shadow-sm">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-500"></i>
+                            <span class="text-[10px] font-bold text-emerald-500 uppercase">Liquida/Hora</span>
+                        </div>
+                        <span id="rentabilidadHoraValor" class="text-sm font-extrabold text-emerald-600">$0/h</span>
+                    </div>
+                </div>
+
+                <!-- Rentabilidad por KM -->
+                <div id="rentabilidadKmBox" class="hidden mt-3 space-y-2">
+                    <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-gray-200 shadow-sm">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-gray-400"></i>
+                            <span class="text-[10px] font-bold text-gray-400 uppercase">Bruta/KM</span>
+                        </div>
+                        <span id="rentabilidadBrutaKmValor" class="text-sm font-extrabold text-gray-600">$0/km</span>
+                    </div>
+                    <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-emerald-200 shadow-sm">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-500"></i>
+                            <span class="text-[10px] font-bold text-emerald-500 uppercase">Liquida/KM</span>
+                        </div>
+                        <span id="rentabilidadLiquidaKmValor" class="text-sm font-extrabold text-emerald-600">$0/km</span>
+                    </div>
+                </div>
+
+                <!-- Promedios por dia trabajado -->
+                <div id="promediosHistorialBox" class="hidden mt-3 p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="calendar-days" class="w-3.5 h-3.5 text-slate-400"></i>
+                            <span class="text-[10px] font-bold text-slate-500 uppercase">Promedios historial</span>
+                        </div>
+                        <span id="promediosDiasTrabajados" class="text-[10px] font-extrabold text-slate-400 uppercase">0 registros</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 text-center">
+                        <div class="rounded-lg bg-blue-50 border border-blue-100 p-2">
+                            <p class="text-[9px] font-bold text-blue-500 uppercase">Gas</p>
+                            <p id="promedioGasDia" class="text-sm font-black text-blue-600">$0</p>
+                        </div>
+                        <div class="rounded-lg bg-orange-50 border border-orange-100 p-2">
+                            <p class="text-[9px] font-bold text-orange-500 uppercase">Mant.</p>
+                            <p id="promedioMantDia" class="text-sm font-black text-orange-600">$0</p>
+                        </div>
+                        <div class="rounded-lg bg-slate-50 border border-slate-100 p-2">
+                            <p class="text-[9px] font-bold text-slate-500 uppercase">Total</p>
+                            <p id="promedioTotalDia" class="text-sm font-black text-slate-700">$0</p>
+                        </div>
+                    </div>
+                    <div id="promediosCalendarioBox" class="mt-2 hidden rounded-lg border border-slate-100 bg-slate-50 p-2">
+                        <div class="flex items-center justify-between text-[10px] mb-2">
+                            <span class="font-bold text-slate-500 uppercase">Calendario</span>
+                            <span id="promedioCalendarioHint" class="font-bold text-slate-400 uppercase">0 dias</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 text-center">
+                            <div>
+                                <p class="text-[9px] font-bold text-blue-500 uppercase">Gas/dia</p>
+                                <p id="promedioCalendarioGas" class="text-xs font-black text-blue-600">$0</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] font-bold text-orange-500 uppercase">Mant/dia</p>
+                                <p id="promedioCalendarioMant" class="text-xs font-black text-orange-600">$0</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] font-bold text-slate-500 uppercase">Total/dia</p>
+                                <p id="promedioCalendarioTotal" class="text-xs font-black text-slate-700">$0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mt-2 text-[9px] text-slate-400 leading-snug">Dia trabajado divide solo dias con carga; calendario incluye huecos entre primera y ultima fecha.</p>
+                </div>
+
+                <!-- Meta Bruta Box -->
+                <div id="metaBrutaBox" class="hidden mt-3">
+                    <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-amber-200 shadow-sm">
+                        <div class="flex items-center gap-2">
+                            <div class="w-7 h-7 bg-amber-50 rounded-lg flex items-center justify-center">
+                                <i data-lucide="target" class="w-3.5 h-3.5 text-amber-500"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-amber-500 uppercase">Meta Bruta a Generar</span>
+                        </div>
+                        <span id="metaBrutaValor" class="text-lg font-extrabold text-amber-500">$0</span>
+                    </div>
+                </div>
+
+                <!-- Tiempo (Opcional) -->
+                <div class="mt-3 pt-3 border-t border-emerald-200/60">
+                    <div class="flex items-center gap-2 mb-2.5">
+                        <div class="w-7 h-7 bg-blue-50 rounded-lg flex items-center justify-center shrink-0">
+                            <i data-lucide="timer" class="w-3.5 h-3.5 text-blue-500"></i>
+                        </div>
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Tiempo <span class="text-gray-300">(Opc.)</span></span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="number" id="horasTrabajadas" placeholder="0" min="0" max="24"
+                            class="input-calc bg-white w-full p-2.5 rounded-xl border border-gray-200 text-sm font-bold text-center text-gray-700 outline-none focus:border-emerald-300 transition-colors shadow-sm">
+                        <span class="text-gray-400 text-xs font-bold">h</span>
+                        <input type="number" id="minutosTrabajados" placeholder="0" min="0" max="59" step="5"
+                            class="input-calc bg-white w-full p-2.5 rounded-xl border border-gray-200 text-sm font-bold text-center text-gray-700 outline-none focus:border-emerald-300 transition-colors shadow-sm">
+                        <span class="text-gray-400 text-xs font-bold">m</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== DEUDA & EXTRAS ===== -->
+            <section id="seccionDeudasExtras" data-mobile-module="deudas" class="mx-4 mt-3 bg-white rounded-2xl p-5 shadow-sm border border-gray-100 animate-slide-up-fade stagger-4">
+                <!-- Deuda Uber -->
+                <div class="pb-3 border-b border-gray-50">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-violet-50 rounded-lg flex items-center justify-center">
+                                <i data-lucide="wallet" class="w-4 h-4 text-violet-500"></i>
+                            </div>
+                            <span class="text-sm text-gray-600">Deuda Uber</span>
+                        </div>
+                        <span id="deudaUberEstado" class="text-[10px] font-bold text-gray-400 uppercase">Sin deuda</span>
+                    </div>
+                    <input type="number" id="deudaUber" placeholder="0 ( + te deben / - debes )" step="1"
+                        class="input-calc w-full bg-gray-50 rounded-xl px-3 py-2.5 text-sm text-gray-700 border border-gray-200 focus:border-violet-400 outline-none">
+                    <p class="text-[10px] text-gray-400 mt-1">Positivo: Uber te debe. Negativo: tu debes a Uber.</p>
+                </div>
+
+                <!-- Deuda Combustible -->
+                <div class="flex items-center justify-between pb-3 border-b border-gray-50">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                            <i data-lucide="fuel" class="w-4 h-4 text-gray-500"></i>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-sm text-gray-600">Deuda Combustible</span>
+                            <!-- Botón editar siempre visible para mejor accesibilidad de entrada inicial -->
+                            <button onclick="editarDeudaCombustible()"
+                                class="p-1 hover:bg-gray-50 rounded transition-all text-gray-400 hover:text-gray-600" title="Editar Deuda">
+                                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <div id="deudaCombustibleBadge" class="hidden flex items-center gap-1.5">
+                            <span id="deudaCombustibleValor" class="text-sm font-extrabold text-gray-800">$0</span>
+                            <button onclick="borrarDeudaCombustible()"
+                                class="p-1.5 hover:bg-red-50 rounded-lg transition-all" title="Borrar">
+                                <i data-lucide="trash-2" class="w-3 h-3 text-gray-400"></i>
+                            </button>
+                        </div>
+                        <span class="text-sm font-bold text-gray-400 deuda-zero">$0.00</span>
+                    </div>
+                </div>
+
+                <div class="py-3 border-b border-gray-50">
+                    <button id="btnPagoDeudaCombustible" onclick="abrirModalPagoDeudaCombustible()"
+                        class="w-full py-3 btn-premium btn-premium-blue btn-ripple text-xs font-bold rounded-2xl flex items-center justify-center gap-2">
+                        <i data-lucide="fuel" class="w-4.5 h-4.5"></i>
+                        <span id="textoBtnPagoDeudaCombustible">Pagar Deuda Combustible</span>
+                    </button>
+                </div>
+
+                <!-- Cargar Gasolina -->
+                <div class="flex gap-2 py-3 border-b border-gray-50">
+                    <input type="number" id="cargaGasolina" placeholder="Monto cargado $" min="1" step="1" inputmode="numeric"
+                        class="w-full bg-gray-50 rounded-xl px-3 py-2.5 text-sm text-gray-700 border border-gray-200 focus:border-emerald-400 outline-none">
+                    <button onclick="cargarGasolina()"
+                        class="btn-premium btn-premium-warning btn-ripple px-4 py-2.5 text-xs font-bold shrink-0 rounded-xl">
+                        <i data-lucide="fuel" class="w-4 h-4"></i>
+                        Cargar
+                    </button>
+                </div>
+
+                <!-- Historial Últimas Cargas de Gasolina -->
+                <div id="boxHistorialCargasGas" class="hidden py-3 border-b border-gray-50 animate-slide-up-fade">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <i data-lucide="history" class="w-3.5 h-3.5 text-blue-500"></i>
+                            Últimas Cargas
+                        </span>
+                        <span id="contadorCargasGas" class="text-[9px] font-bold text-gray-400 uppercase bg-gray-100 px-2 py-0.5 rounded-full">0/5</span>
+                    </div>
+                    <div id="listaHistorialCargasGas" class="space-y-1.5" role="list">
+                        <!-- Items generados dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- Movimiento Extra -->
+                <div class="pt-3">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                <i data-lucide="arrow-left-right" class="w-4 h-4 text-gray-500"></i>
+                            </div>
+                            <span class="text-sm text-gray-600">Mov Extra</span>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" id="extraDesc" placeholder="Descripcion"
+                            class="w-full bg-gray-50 rounded-xl px-3 py-2 text-xs text-gray-700 border border-gray-200 focus:border-emerald-400 outline-none">
+                        <input type="number" id="extraMonto" placeholder="$"
+                            class="w-20 bg-gray-50 rounded-xl px-3 py-2 text-xs text-gray-700 border border-gray-200 focus:border-emerald-400 outline-none text-center">
+                        <button onclick="guardarExtra()"
+                            class="btn-premium btn-premium-success btn-ripple px-3.5 py-2.5 rounded-xl">
+                            <i data-lucide="arrow-right" class="w-4.5 h-4.5"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+
+
+            <!-- ===== VEHICLE INFO ===== -->
+            <div id="seccionVehiculoInfo" role="button" tabindex="0" onclick="abrirModalVehiculo()"
+                class="mx-4 mt-3 bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center justify-between hover:border-emerald-300 hover:shadow-md cursor-pointer transition-all active:scale-[0.99] animate-slide-up-fade stagger-5 group">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100 rounded-full flex items-center justify-center transition-colors">
+                        <i data-lucide="car" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold text-gray-800 flex items-center gap-1.5">
+                            <span>Mi Vehículo</span>
+                            <span id="badgeVehiculoEstado" class="text-[9px] font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">Configurar</span>
+                        </p>
+                        <p id="subtextoVehiculoInfo" class="text-[10px] text-gray-400">Desgaste multicomponente</p>
+                    </div>
+                </div>
+                <div class="text-gray-400 group-hover:text-emerald-600 transition-colors">
+                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                </div>
+            </div>
+
+            <!-- ===== HISTORIAL ===== -->
+            <section id="seccionHistorial" data-mobile-module="historial" class="hidden mx-4 mt-3 bg-white rounded-2xl p-5 shadow-sm border border-gray-100 animate-fade-in pb-4">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-bold text-gray-900 uppercase tracking-widest">Historial</h3>
+                    <div class="flex items-center gap-2">
+                        <div class="text-[10px] font-bold text-gray-400 bg-gray-100 px-2 py-1 rounded-full">PENDIENTE</div>
+                        <button id="desktopHistorialCloseBtn" type="button" onclick="cerrarHistorialDesktopModal()"
+                            class="desktop-history-close hidden w-8 h-8 rounded-full bg-gray-100 text-gray-500 hover:text-gray-700 hover:bg-gray-200 transition-colors items-center justify-center"
+                            title="Cerrar historial">
+                            <i data-lucide="x" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="listaHistorial" class="space-y-3 mb-6" role="list">
+                    <!-- Items -->
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                    <div class="space-y-2.5 mb-4">
+                        <!-- Gasolina -->
+                        <div class="flex items-center justify-between p-3 bg-blue-50 rounded-xl border border-blue-100">
+                            <div class="flex items-center gap-2">
+                                <div class="p-1.5 bg-blue-100 rounded-lg text-blue-600">
+                                    <i data-lucide="fuel" class="w-3.5 h-3.5"></i>
+                                </div>
+                                <span class="text-xs font-bold text-blue-700 uppercase tracking-wide">Deuda Combustible</span>
+                            </div>
+                            <span id="historialTotalGas" class="text-lg font-extrabold text-blue-600">$0</span>
+                        </div>
+                        <!-- Mantenimiento -->
+                        <div class="flex items-center justify-between p-3 bg-orange-50 rounded-xl border border-orange-100">
+                            <div class="flex items-center gap-2">
+                                <div class="p-1.5 bg-orange-100 rounded-lg text-orange-600">
+                                    <i data-lucide="wrench" class="w-3.5 h-3.5"></i>
+                                </div>
+                                <span class="text-xs font-bold text-orange-700 uppercase tracking-wide">Mantenimiento</span>
+                            </div>
+                            <span id="historialTotalMaint" class="text-lg font-extrabold text-orange-600">$0</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center pt-3 border-t-2 border-gray-200">
+                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Total Acumulado</span>
+                        <span id="historialGranTotal" class="text-2xl font-extrabold text-gray-800">$0</span>
+                    </div>
+                </div>
+
+                <button onclick="limpiarHistorial()"
+                    class="w-full mt-4 py-3 text-red-400 hover:text-red-500 text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2">
+                    <i data-lucide="trash" class="w-3 h-3"></i> Limpiar Todo
+                </button>
+            </section>
+            <div id="desktopHistorialBackdrop" class="desktop-history-backdrop hidden" onclick="cerrarHistorialDesktopModal()"></div>
+
+        </div>
+
+
+
+
+        </div>
+    </div>
+
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- MODAL EDITOR -->
+    <div id="modalEditor" role="dialog" aria-modal="true"
+        class="fixed inset-0 bg-black/30 backdrop-blur-sm hidden flex items-center justify-center z-[100] p-4 animate-modal-backdrop">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xs p-6 relative overflow-hidden animate-modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-900">Editar</h3>
+                <button onclick="cerrarModal()"
+                    aria-label="Cerrar modal"
+                    class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Gasolina (Ref)</label>
+                    <input type="number" id="editGas" oninput="calcularTotalEdicion()"
+                        class="w-full p-3 bg-gray-50 rounded-xl font-bold text-gray-800 outline-none focus:ring-2 focus:ring-emerald-100 transition-all">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Mantenimiento</label>
+                    <input type="number" id="editMaint" oninput="calcularTotalEdicion()"
+                        class="w-full p-3 bg-gray-50 rounded-xl font-bold text-gray-800 outline-none focus:ring-2 focus:ring-emerald-100 transition-all">
+                </div>
+                <div class="pt-4 border-t border-gray-100 flex justify-between items-center">
+                    <span class="text-xs font-bold text-gray-400">TOTAL</span>
+                    <span id="editTotalDisplay" class="text-2xl font-extrabold text-gray-800">$0</span>
+                </div>
+            </div>
+            <div class="flex gap-3 mt-6">
+                <button onclick="guardarEdicion()"
+                    class="w-full py-3 btn-premium btn-premium-success btn-ripple text-sm font-bold rounded-xl">
+                    Guardar Cambios
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PAGO PARCIAL -->
+    <div id="modalParcial" role="dialog" aria-modal="true"
+        class="fixed inset-0 bg-black/30 backdrop-blur-sm hidden flex items-center justify-center z-[100] p-4 animate-modal-backdrop">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xs p-6 relative overflow-hidden animate-modal-content">
+            <div class="flex justify-between items-center mb-5">
+                <h3 class="text-lg font-bold text-gray-900">Pago Mantenimiento</h3>
+                <button onclick="cerrarModalParcial()"
+                    aria-label="Cerrar modal de pago parcial"
+                    class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Pago parcial de mantenimiento</p>
+            <div id="parcialInfoDeuda" class="mb-4 p-3 bg-gray-50 rounded-xl">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase">Deuda pendiente</span>
+                    <span id="parcialDeudaPendiente" class="text-sm font-extrabold text-gray-700">$0</span>
+                </div>
+            </div>
+
+            <div id="parcialMontoBox">
+                <label class="block text-[10px] font-bold text-gray-400 uppercase mb-2">Monto a pagar</label>
+                <div class="flex items-center gap-2 mb-2">
+                    <input type="number" id="parcialMonto" placeholder="0"
+                        class="min-w-0 flex-1 p-3 bg-gray-50 rounded-xl font-bold text-gray-800 outline-none focus:ring-2 focus:ring-emerald-100 transition-all text-xl text-center">
+                    <button onclick="ajustarMontoParcial(10)"
+                        class="shrink-0 w-11 h-11 flex items-center justify-center bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-xl font-extrabold text-xs transition-all active:scale-90 border border-emerald-100">
+                        +10
+                    </button>
+                </div>
+
+                <button onclick="llenarTodoParcial()"
+                    class="w-full mb-2 py-1.5 text-[10px] font-bold text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all uppercase tracking-wider">
+                    Pagar Todo
+                </button>
+
+                <p id="parcialResta" class="text-[10px] text-gray-400 text-center mb-4">Restan: $0</p>
+
+                <button onclick="guardarParcial()"
+                    class="w-full py-3 btn-premium btn-premium-success btn-ripple text-sm font-bold rounded-xl">
+                    Aplicar Pago Parcial
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PAGO DEUDA COMBUSTIBLE -->
+    <div id="modalPagoDeudaCombustible" role="dialog" aria-modal="true"
+        class="fixed inset-0 bg-black/30 backdrop-blur-sm hidden flex items-center justify-center z-[100] p-4 animate-modal-backdrop">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xs p-6 relative overflow-hidden animate-modal-content">
+            <div class="flex justify-between items-center mb-5">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                        <i data-lucide="fuel" class="w-4 h-4 text-blue-600"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900">Pago Deuda Combustible</h3>
+                </div>
+                <button onclick="cerrarModalPagoDeudaCombustible()"
+                    aria-label="Cerrar modal de pago de deuda combustible"
+                    class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <div class="mb-4 p-3 bg-gray-50 rounded-xl">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase flex items-center gap-1.5">
+                        <i data-lucide="wallet" class="w-3 h-3"></i>
+                        <span id="pagoDeudaCombustiblePendienteTitulo">Deuda pendiente</span>
+                    </span>
+                    <span id="pagoDeudaCombustiblePendiente" class="text-sm font-extrabold text-gray-700">$0</span>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-bold text-gray-400 uppercase mb-2 flex items-center gap-1.5"><i data-lucide="coins" class="w-3 h-3"></i>Monto a pagar</label>
+                <div class="flex items-center gap-2 mb-2">
+                    <input type="number" id="pagoDeudaCombustibleMonto" placeholder="0"
+                        class="min-w-0 flex-1 p-3 bg-gray-50 rounded-xl font-bold text-gray-800 outline-none focus:ring-2 focus:ring-blue-100 transition-all text-xl text-center">
+                    <button onclick="ajustarPagoDeudaCombustible(10)"
+                        class="shrink-0 w-11 h-11 flex items-center justify-center bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl font-extrabold text-xs transition-all active:scale-90 border border-blue-100">
+                        +10
+                    </button>
+                </div>
+
+                <button onclick="llenarTodoPagoDeudaCombustible()"
+                    class="w-full mb-2 py-1.5 text-[10px] font-bold text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all uppercase tracking-wider">
+                    Pagar Todo
+                </button>
+
+                <p id="pagoDeudaCombustibleResta" class="text-[10px] text-gray-400 text-center mb-4">Restan: $0</p>
+
+                <button onclick="guardarPagoDeudaCombustible()"
+                    class="w-full py-3 btn-premium btn-premium-blue btn-ripple text-sm font-bold rounded-xl flex items-center justify-center gap-2">
+                    <i data-lucide="check" class="w-4.5 h-4.5"></i>
+                    <span>Aplicar Pago</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EDITAR EXTRA -->
+    <div id="modalEditarExtra" role="dialog" aria-modal="true"
+        class="fixed inset-0 bg-black/30 backdrop-blur-sm hidden flex items-center justify-center z-[100] p-4 animate-modal-backdrop">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xs p-6 relative overflow-hidden animate-modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-900">Editar Movimiento</h3>
+                <button onclick="cerrarModalExtra()"
+                    aria-label="Cerrar modal de movimiento extra"
+                    class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Descripcion</label>
+                    <input type="text" id="editExtraDesc" placeholder="Descripcion"
+                        class="w-full p-3 bg-gray-50 rounded-xl font-bold text-gray-800 outline-none focus:ring-2 focus:ring-emerald-100 transition-all">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Monto</label>
+                    <input type="number" id="editExtraMonto" placeholder="0"
+                        class="w-full p-3 bg-gray-50 rounded-xl font-bold text-gray-800 outline-none focus:ring-2 focus:ring-emerald-100 transition-all text-lg text-center">
+                </div>
+            </div>
+
+            <div class="flex gap-3 mt-6">
+                <button onclick="guardarEdicionExtra()"
+                    class="w-full py-3 btn-premium btn-premium-success btn-ripple text-sm font-bold rounded-xl">
+                    Guardar Cambios
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EDITAR DEUDA COMBUSTIBLE -->
+    <div id="modalDeudaCombustible" role="dialog" aria-modal="true"
+        class="fixed inset-0 bg-black/30 backdrop-blur-sm hidden flex items-center justify-center z-[100] p-4 animate-modal-backdrop">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xs p-6 relative overflow-hidden animate-modal-content">
+            <div class="flex justify-between items-center mb-5">
+                <h3 class="text-lg font-bold text-gray-900">Editar Deuda</h3>
+                <button onclick="cerrarModalDeudaCombustible()"
+                    aria-label="Cerrar modal de edición de deuda combustible"
+                    class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <div class="space-y-3">
+                <label for="editDeudaCombustible" class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">Monto</label>
+                <input type="text" id="editDeudaCombustible" placeholder="0" inputmode="decimal"
+                    class="w-full p-3 bg-gray-50 rounded-xl font-bold text-gray-800 outline-none focus:ring-2 focus:ring-emerald-100 transition-all text-xl text-center">
+                <p class="text-[10px] text-gray-400">Acepta punto o coma decimal.</p>
+            </div>
+
+            <div class="flex gap-3 mt-6">
+                <button onclick="cerrarModalDeudaCombustible()"
+                    class="flex-1 py-3 btn-premium btn-premium-soft text-sm font-bold rounded-xl">
+                    Cancelar
+                </button>
+                <button onclick="guardarEdicionDeudaCombustible()"
+                    class="flex-1 py-3 btn-premium btn-premium-success btn-ripple text-sm font-bold rounded-xl">
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- MODAL VEHICULO (DESGASTE MULTICOMPONENTE) -->
+    <div id="modalVehiculo" role="dialog" aria-modal="true"
+        class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center z-[110] p-4 animate-modal-backdrop">
+        <div id="modalVehiculoContent" class="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-5 relative overflow-hidden animate-modal-content max-h-[92vh] flex flex-col">
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-4 pb-3 border-b border-gray-100">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
+                        <i data-lucide="car" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-extrabold text-gray-900 leading-tight">Mi Vehículo</h3>
+                        <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Desgaste Multicomponente</p>
+                    </div>
+                </div>
+                <button type="button" id="btnCerrarModalVehiculo" onclick="cerrarModalVehiculo()"
+                    aria-label="Cerrar modal de vehículo"
+                    class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <!-- Scrollable content -->
+            <div class="space-y-3 overflow-y-auto pr-1 flex-1 custom-scrollbar">
+                <!-- Llantas -->
+                <div class="p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-gray-800 flex items-center gap-1.5">
+                            <i data-lucide="disc" class="w-3.5 h-3.5 text-gray-500"></i>
+                            Llantas
+                        </span>
+                        <div class="flex items-center gap-1.5">
+                            <span id="vehiculoLlantasProgreso" class="text-[9px] font-bold text-gray-400">0%</span>
+                            <span id="vehiculoLlantasTasa" class="text-[10px] font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">$0.000 / km</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mb-2">
+                        <div>
+                            <label for="vehiculoLlantasPrecio" class="block text-[9px] font-bold text-gray-400 uppercase mb-0.5">Precio ($)</label>
+                            <input type="number" id="vehiculoLlantasPrecio" placeholder="0" min="0" step="1" inputmode="numeric"
+                                class="w-full p-2 bg-white rounded-xl text-xs font-bold text-gray-800 border border-gray-200 outline-none focus:border-emerald-400">
+                        </div>
+                        <div>
+                            <label for="vehiculoLlantasKm" class="block text-[9px] font-bold text-gray-400 uppercase mb-0.5">Vida Útil (KM)</label>
+                            <input type="number" id="vehiculoLlantasKm" placeholder="Ej: 40000" min="0" step="100" inputmode="numeric"
+                                class="w-full p-2 bg-white rounded-xl text-xs font-bold text-gray-800 border border-gray-200 outline-none focus:border-emerald-400">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-0.5">
+                            <label for="vehiculoLlantasAhorrado" class="block text-[9px] font-bold text-gray-400 uppercase">Ahorrado ($)</label>
+                            <span id="vehiculoLlantasAhorradoInfo" class="text-[9px] text-gray-400 font-medium">$0 de $0</span>
+                        </div>
+                        <input type="number" id="vehiculoLlantasAhorrado" placeholder="0" min="0" step="1" inputmode="numeric"
+                            class="w-full p-2 bg-white rounded-xl text-xs font-bold text-gray-800 border border-gray-200 outline-none focus:border-emerald-400">
+                    </div>
+                </div>
+
+                <!-- Frenos -->
+                <div class="p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-gray-800 flex items-center gap-1.5">
+                            <i data-lucide="circle-dot" class="w-3.5 h-3.5 text-gray-500"></i>
+                            Frenos
+                        </span>
+                        <div class="flex items-center gap-1.5">
+                            <span id="vehiculoFrenosProgreso" class="text-[9px] font-bold text-gray-400">0%</span>
+                            <span id="vehiculoFrenosTasa" class="text-[10px] font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">$0.000 / km</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mb-2">
+                        <div>
+                            <label for="vehiculoFrenosPrecio" class="block text-[9px] font-bold text-gray-400 uppercase mb-0.5">Precio ($)</label>
+                            <input type="number" id="vehiculoFrenosPrecio" placeholder="0" min="0" step="1" inputmode="numeric"
+                                class="w-full p-2 bg-white rounded-xl text-xs font-bold text-gray-800 border border-gray-200 outline-none focus:border-emerald-400">
+                        </div>
+                        <div>
+                            <label for="vehiculoFrenosKm" class="block text-[9px] font-bold text-gray-400 uppercase mb-0.5">Vida Útil (KM)</label>
+                            <input type="number" id="vehiculoFrenosKm" placeholder="Ej: 25000" min="0" step="100" inputmode="numeric"
+                                class="w-full p-2 bg-white rounded-xl text-xs font-bold text-gray-800 border border-gray-200 outline-none focus:border-emerald-400">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-0.5">
+                            <label for="vehiculoFrenosAhorrado" class="block text-[9px] font-bold text-gray-400 uppercase">Ahorrado ($)</label>
+                            <span id="vehiculoFrenosAhorradoInfo" class="text-[9px] text-gray-400 font-medium">$0 de $0</span>
+                        </div>
+                        <input type="number" id="vehiculoFrenosAhorrado" placeholder="0" min="0" step="1" inputmode="numeric"
+                            class="w-full p-2 bg-white rounded-xl text-xs font-bold text-gray-800 border border-gray-200 outline-none focus:border-emerald-400">
+                    </div>
+                </div>
+
+                <!-- Cambio de Aceite -->
+                <div class="p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-gray-800 flex items-center gap-1.5">
+                            <i data-lucide="droplet" class="w-3.5 h-3.5 text-gray-500"></i>
+                            Cambio de Aceite
+                        </span>
+                        <div class="flex items-center gap-1.5">
+                            <span id="vehiculoAceiteProgreso" class="text-[9px] font-bold text-gray-400">0%</span>
+                            <span id="vehiculoAceiteTasa" class="text-[10px] font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">$0.000 / km</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mb-2">
+                        <div>
+                            <label for="vehiculoAceitePrecio" class="block text-[9px] font-bold text-gray-400 uppercase mb-0.5">Precio ($)</label>
+                            <input type="number" id="vehiculoAceitePrecio" placeholder="0" min="0" step="1" inputmode="numeric"
+                                class="w-full p-2 bg-white rounded-xl text-xs font-bold text-gray-800 border border-gray-200 outline-none focus:border-emerald-400">
+                        </div>
+                        <div>
+                            <label for="vehiculoAceiteKm" class="block text-[9px] font-bold text-gray-400 uppercase mb-0.5">Vida Útil (KM)</label>
+                            <input type="number" id="vehiculoAceiteKm" placeholder="Ej: 5000" min="0" step="100" inputmode="numeric"
+                                class="w-full p-2 bg-white rounded-xl text-xs font-bold text-gray-800 border border-gray-200 outline-none focus:border-emerald-400">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-0.5">
+                            <label for="vehiculoAceiteAhorrado" class="block text-[9px] font-bold text-gray-400 uppercase">Ahorrado ($)</label>
+                            <span id="vehiculoAceiteAhorradoInfo" class="text-[9px] text-gray-400 font-medium">$0 de $0</span>
+                        </div>
+                        <input type="number" id="vehiculoAceiteAhorrado" placeholder="0" min="0" step="1" inputmode="numeric"
+                            class="w-full p-2 bg-white rounded-xl text-xs font-bold text-gray-800 border border-gray-200 outline-none focus:border-emerald-400">
+                    </div>
+                </div>
+
+                <!-- Extras -->
+                <div class="p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-gray-800 flex items-center gap-1.5">
+                            <i data-lucide="wrench" class="w-3.5 h-3.5 text-gray-500"></i>
+                            Extras e Imprevistos
+                        </span>
+                        <div class="flex items-center gap-1.5">
+                            <span id="vehiculoExtrasProgreso" class="text-[9px] font-bold text-gray-400">0%</span>
+                            <span id="vehiculoExtrasTasa" class="text-[10px] font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">$0.000 / km</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mb-2">
+                        <div>
+                            <label for="vehiculoExtrasPrecio" class="block text-[9px] font-bold text-gray-400 uppercase mb-0.5">Precio ($)</label>
+                            <input type="number" id="vehiculoExtrasPrecio" placeholder="0" min="0" step="1" inputmode="numeric"
+                                class="w-full p-2 bg-white rounded-xl text-xs font-bold text-gray-800 border border-gray-200 outline-none focus:border-emerald-400">
+                        </div>
+                        <div>
+                            <label for="vehiculoExtrasKm" class="block text-[9px] font-bold text-gray-400 uppercase mb-0.5">Vida Útil (KM)</label>
+                            <input type="number" id="vehiculoExtrasKm" placeholder="Ej: 10000" min="0" step="100" inputmode="numeric"
+                                class="w-full p-2 bg-white rounded-xl text-xs font-bold text-gray-800 border border-gray-200 outline-none focus:border-emerald-400">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-0.5">
+                            <label for="vehiculoExtrasAhorrado" class="block text-[9px] font-bold text-gray-400 uppercase">Ahorrado ($)</label>
+                            <span id="vehiculoExtrasAhorradoInfo" class="text-[9px] text-gray-400 font-medium">$0 de $0</span>
+                        </div>
+                        <input type="number" id="vehiculoExtrasAhorrado" placeholder="0" min="0" step="1" inputmode="numeric"
+                            class="w-full p-2 bg-white rounded-xl text-xs font-bold text-gray-800 border border-gray-200 outline-none focus:border-emerald-400">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer con resumen -->
+            <div class="pt-3 mt-3 border-t border-gray-100">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Desgaste total:</span>
+                    <span id="vehiculoTotalTasaKm" class="text-base font-extrabold text-emerald-600">$0.000 / km</span>
+                </div>
+                <div class="flex items-center justify-between mb-1 text-[11px] text-gray-400">
+                    <span>Ahorro total actual:</span>
+                    <span id="vehiculoTotalAhorrado" class="font-bold text-emerald-600">$0</span>
+                </div>
+                <div class="flex items-center justify-between mb-3 text-[11px] text-gray-400">
+                    <span>Meta ciclo actual (<span id="vehiculoMetaCicloKmsLabel">5000</span> km):</span>
+                    <span id="vehiculoTotalProyeccionCiclo" class="font-bold text-gray-700">$0</span>
+                </div>
+                <button type="button" id="btnGuardarVehiculo" onclick="guardarConfiguracionVehiculo()"
+                    class="w-full py-3.5 btn-premium btn-premium-success btn-ripple text-sm font-bold rounded-2xl flex items-center justify-center gap-2">
+                    <i data-lucide="check" class="w-4.5 h-4.5"></i>
+                    <span>Guardar Configuración</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Reorden visual Fase 2: control de mantenimiento debajo de ingresos/rentabilidad
+        const resumenGananciasSection = document.getElementById('seccionResumenGanancias');
+        const controlMantSection = document.getElementById('seccionControlMant');
+        if (resumenGananciasSection && controlMantSection) {
+            resumenGananciasSection.insertAdjacentElement('afterend', controlMantSection);
+        }
+
+        // Update clock badge
+        function updateClock() {
+            const el = document.getElementById('horaActualBadge');
+            if (el) el.textContent = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+        }
+        updateClock();
+        setInterval(updateClock, 30000);
+
+        // Hide deuda-zero when badge is shown
+        const observer = new MutationObserver(() => {
+            const badge = document.getElementById('deudaCombustibleBadge');
+            const zero = document.querySelector('.deuda-zero');
+            if (badge && zero) {
+                zero.style.display = badge.classList.contains('hidden') ? '' : 'none';
+            }
+        });
+        const badge = document.getElementById('deudaCombustibleBadge');
+        if (badge) observer.observe(badge, { attributes: true, attributeFilter: ['class'] });
+
+
+    </script>
+
+    <!-- Bottom Navigation Bar & FAB Speed Dial (Mobile) -->
+    <div id="mobileBottomNavContainer" class="fixed bottom-0 left-0 right-0 z-40 lg:hidden flex justify-center pointer-events-none">
+        <div class="w-full max-w-[440px] relative pointer-events-auto">
+            
+            <!-- Speed Dial Overlay -->
+            <div id="speedDialOverlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs opacity-0 pointer-events-none transition-opacity duration-300 z-30" onclick="toggleSpeedDial(false)"></div>
+            
+            <!-- Speed Dial Options -->
+            <div id="speedDialMenu" class="absolute bottom-28 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3.5 opacity-0 pointer-events-none transition-all duration-300 transform translate-y-4 z-40">
+                <button type="button" id="fabGasolinaBtn" onclick="openQuickSheet('gasolina')" class="flex items-center gap-2.5 px-4 py-2.5 bg-blue-600 text-white font-bold text-xs rounded-full shadow-lg hover:bg-blue-700 active:scale-95 transition-all">
+                    <i data-lucide="fuel" class="w-4 h-4"></i>
+                    <span>Cargar Gasolina</span>
+                </button>
+                <button type="button" id="fabKmBtn" onclick="openQuickSheet('km')" class="flex items-center gap-2.5 px-4 py-2.5 bg-emerald-600 text-white font-bold text-xs rounded-full shadow-lg hover:bg-emerald-700 active:scale-95 transition-all">
+                    <i data-lucide="route" class="w-4 h-4"></i>
+                    <span>Cargar KM</span>
+                </button>
+            </div>
+
+            <!-- Bottom Navigation Bar -->
+            <nav class="bg-white/95 backdrop-blur-md border-t border-gray-200/80 px-4 py-2 flex items-center justify-between relative z-40 shadow-lg">
+                <button type="button" id="navInicioBtn" onclick="switchMobileTab('inicio')" class="flex flex-col items-center gap-1 text-emerald-600 active:scale-95 transition-transform">
+                    <i data-lucide="home" class="w-5 h-5"></i>
+                    <span class="text-[10px] font-bold">Inicio</span>
+                </button>
+                <button type="button" id="navHistorialBtn" onclick="switchMobileTab('historial')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-600 active:scale-95 transition-transform">
+                    <i data-lucide="clock-3" class="w-5 h-5"></i>
+                    <span class="text-[10px] font-medium">Historial</span>
+                </button>
+                
+                <!-- Floating FAB Center Button -->
+                <div class="relative -top-5">
+                    <button type="button" id="fabMainBtn" onclick="toggleSpeedDial()" aria-label="Abrir opciones de carga rápida" class="w-14 h-14 bg-gradient-to-tr from-emerald-600 to-teal-500 text-white rounded-full shadow-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-300 border-4 border-[#F2F2F7]">
+                        <i data-lucide="plus" id="fabIcon" class="w-7 h-7 transition-transform duration-300"></i>
+                    </button>
+                </div>
+
+                <button type="button" id="navModulosBtn" onclick="switchMobileTab('modulos')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-600 active:scale-95 transition-transform">
+                    <i data-lucide="grid" class="w-5 h-5"></i>
+                    <span class="text-[10px] font-medium">Módulos</span>
+                </button>
+                <button type="button" id="navAjustesBtn" onclick="switchMobileTab('ajustes')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-600 active:scale-95 transition-transform">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                    <span class="text-[10px] font-medium">Ajustes</span>
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Modal Bottom Sheet: Quick KM -->
+    <div id="sheetCargaKm" class="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/50 backdrop-blur-xs opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="w-full max-w-[440px] bg-white rounded-t-3xl p-6 shadow-2xl transform translate-y-full transition-transform duration-300 ease-out">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                    <div class="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
+                        <i data-lucide="route" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-800">Registrar KM de Hoy</h3>
+                </div>
+                <button type="button" onclick="closeQuickSheet('km')" class="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <label class="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-1">Kilómetros recorridos</label>
+                <div class="flex items-baseline gap-2 border-b-2 border-emerald-500 pb-2">
+                    <input type="number" id="inputQuickKm" placeholder="0" class="text-4xl font-black text-slate-800 bg-transparent outline-none w-full">
+                    <span class="text-lg font-bold text-gray-400">km</span>
+                </div>
+            </div>
+            <button type="button" id="btnSaveQuickKm" onclick="submitQuickKm()" class="w-full py-3.5 bg-emerald-600 text-white font-bold text-sm rounded-2xl shadow-lg hover:bg-emerald-700 active:scale-95 transition-all">
+                Guardar Kilometraje
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Bottom Sheet: Quick Gasolina -->
+    <div id="sheetCargaGasolina" class="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/50 backdrop-blur-xs opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="w-full max-w-[440px] bg-white rounded-t-3xl p-6 shadow-2xl transform translate-y-full transition-transform duration-300 ease-out">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                    <div class="p-2 bg-blue-50 text-blue-600 rounded-xl">
+                        <i data-lucide="fuel" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-800">Cargar Gasolina</h3>
+                </div>
+                <button type="button" onclick="closeQuickSheet('gasolina')" class="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <label class="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-1">Monto Pagado ($)</label>
+                <div class="flex items-baseline gap-1 border-b-2 border-blue-500 pb-2 mb-3">
+                    <span class="text-3xl font-bold text-blue-600">$</span>
+                    <input type="number" id="inputQuickGasMonto" placeholder="0" class="text-4xl font-black text-slate-800 bg-transparent outline-none w-full">
+                </div>
+            </div>
+            <button type="button" id="btnSaveQuickGasolina" onclick="submitQuickGasolina()" class="w-full py-3.5 bg-blue-600 text-white font-bold text-sm rounded-2xl shadow-lg hover:bg-blue-700 active:scale-95 transition-all">
+                Registrar Carga
+            </button>
+        </div>
+    </div>
+
+
+    <script src="firebase-config.js"></script>
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>
+
+

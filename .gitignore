@@ -1,0 +1,30 @@
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs y Editores
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Logs y temporales
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.gemini/
+
+# Worktrees locales
+.worktrees/
+
+# Local Netlify folder
+.netlify
+.superpowers/
+
+# Local Firebase config (keep personal credentials out of Git)
+firebase-config.js
